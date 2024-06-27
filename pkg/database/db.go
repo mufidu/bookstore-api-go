@@ -27,8 +27,6 @@ func ConnectDatabase() {
 	dbURl := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", db_user, db_pass, db_hostname, db_port, db_name)
 	for i := 1; i <= 3; i++ {
 		database, err = gorm.Open(postgres.Open(dbURl), &gorm.Config{})
-		fmt.Println("Connecting to database...")
-		fmt.Println(dbURl)
 		if err == nil {
 			break
 			} else {
