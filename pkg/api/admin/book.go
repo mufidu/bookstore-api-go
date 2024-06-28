@@ -3,7 +3,6 @@ package admin
 import (
 	"bookstore-api-go/pkg/database"
 	"bookstore-api-go/pkg/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -63,9 +62,6 @@ func GetAllBooks(c *gin.Context) {
 // @Router /admin/books [post]
 func CreateBook(c *gin.Context) {
 	var book models.CreateBook
-
-	// Print the incoming JSON body
-	fmt.Println(c.Request.Body)
 
 	if err := c.ShouldBindJSON(&book); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad Request"})

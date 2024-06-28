@@ -29,14 +29,17 @@ func ConnectDatabase() {
 		database, err = gorm.Open(postgres.Open(dbURl), &gorm.Config{})
 		if err == nil {
 			break
-			} else {
-				log.Printf("Attempt %d: Failed to initialize database. Retrying...", i)
-				time.Sleep(3 * time.Second)
-			}
+		} else {
+			log.Printf("Attempt %d: Failed to initialize database. Retrying...", i)
+			time.Sleep(3 * time.Second)
+		}
 	}
+	database.SetupJoinTable(&models.Book{}, "Users", &models.UserBook{})
+	database.SetupJoinTable(&models.Book{}, "Carts", &models.CartBook{})
 	database.AutoMigrate(&models.Book{})
 	database.AutoMigrate(&models.User{})
 	database.AutoMigrate(&models.Admin{})
+	database.AutoMigrate(&models.Cart{})
 
 	DB = database
 }

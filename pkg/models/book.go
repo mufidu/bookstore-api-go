@@ -11,6 +11,8 @@ type Book struct {
 	Author    string    `json:"author"`
 	Year      int       `json:"year"`
 	Quantity  int       `json:"quantity"`
+	Carts     []*Cart   `json:"carts" gorm:"many2many:cart_books;"`
+	Users     []*User   `json:"users" gorm:"many2many:user_books;"`
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
@@ -33,4 +35,16 @@ type UpdateBook struct {
 	Author   string `json:"author"`
 	Year     int    `json:"year"`
 	Quantity int    `json:"quantity"`
+}
+
+type CartBook struct {
+	BookID   uint `json:"book_id"`
+	CartID   uint `json:"cart_id"`
+	Quantity int  `json:"quantity"`
+}
+
+type UserBook struct {
+	BookID   uint `json:"book_id"`
+	UserID   uint `json:"user_id"`
+	Quantity int  `json:"quantity"`
 }

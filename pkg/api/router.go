@@ -36,6 +36,8 @@ func InitRouter() *gin.Engine {
 
 		v1.GET("/user/books", middleware.JWTAuthUser(), user.GetAllBooks)
 
+		v1.POST("/user/cart", middleware.JWTAuthUser(), user.AddToCart)
+
 		v1.POST("/admin/login", admin.LoginHandler)
 		v1.POST("/admin/register", admin.RegisterHandler)
 		v1.GET("/admin/users", middleware.JWTAuthAdmin(), admin.GetAllUsers)

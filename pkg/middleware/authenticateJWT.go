@@ -3,7 +3,6 @@ package middleware
 import (
 	"bookstore-api-go/pkg/api/admin"
 	"bookstore-api-go/pkg/api/user"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -51,9 +50,6 @@ func JWTAuthUser() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
-		fmt.Println("USERNAME", claims.Username)
-		fmt.Println("USERTYPE", claims.UserType)
 
 		c.Set("username", claims.Username)
 		c.Set("userType", claims.UserType)
