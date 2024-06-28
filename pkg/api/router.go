@@ -5,6 +5,7 @@ import (
 	authAdmin "bookstore-api-go/pkg/api/admin/auth"
 	"bookstore-api-go/pkg/api/books"
 	authUser "bookstore-api-go/pkg/api/user/auth"
+	profileUser "bookstore-api-go/pkg/api/user/profile"
 	"bookstore-api-go/pkg/middleware"
 	"time"
 
@@ -37,6 +38,7 @@ func InitRouter() *gin.Engine {
 
 		v1.POST("/user/login", authUser.LoginHandler)
 		v1.POST("/user/register", authUser.RegisterHandler)
+		v1.GET("/user/profile", middleware.JWTAuthUser(), profileUser.GetProfile)
 
 		v1.POST("/admin/login", authAdmin.LoginHandler)
 		v1.POST("/admin/register", authAdmin.RegisterHandler)

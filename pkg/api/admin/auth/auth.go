@@ -141,6 +141,7 @@ func GenerateToken(username string) (string, error) {
 			Issuer:    username,
 		},
 		UserType: "admin",
+		Username: username,
 	}
 
 	// Declare the token with the algorithm used for signing, and the claims
