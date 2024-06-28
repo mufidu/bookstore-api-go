@@ -15,6 +15,8 @@ func HashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
+// @BasePath /api/v1
+
 // GetProfile godoc
 // @Summary Get user profile
 // @Schemes http

@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @BasePath /api/v1
+
 // GetAllUsers godoc
 // @Summary Get all users
 // @Schemes http

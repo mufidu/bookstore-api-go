@@ -3,8 +3,8 @@ package api
 import (
 	"bookstore-api-go/docs"
 	authAdmin "bookstore-api-go/pkg/api/admin/auth"
+	bookAdmin "bookstore-api-go/pkg/api/admin/book"
 	userAdmin "bookstore-api-go/pkg/api/admin/user"
-	"bookstore-api-go/pkg/api/books"
 	authUser "bookstore-api-go/pkg/api/user/auth"
 	profileUser "bookstore-api-go/pkg/api/user/profile"
 	"bookstore-api-go/pkg/middleware"
@@ -30,12 +30,7 @@ func InitRouter() *gin.Engine {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/", middleware.JWTAuthAdmin(), books.Healthcheck)
-		v1.GET("/books", books.FindBooks)
-		v1.POST("/books", middleware.JWTAuthUser(), books.CreateBook)
-		v1.GET("/books/:id", books.FindBook)
-		v1.PUT("/books/:id", books.UpdateBook)
-		v1.DELETE("/books/:id", books.DeleteBook)
+		v1.GET("/", bookAdmin.Healthcheck)
 
 		v1.POST("/user/login", authUser.LoginHandler)
 		v1.POST("/user/register", authUser.RegisterHandler)
@@ -46,6 +41,11 @@ func InitRouter() *gin.Engine {
 		v1.POST("/admin/register", authAdmin.RegisterHandler)
 		v1.GET("/admin/users", middleware.JWTAuthAdmin(), userAdmin.GetAllUsers)
 		v1.PUT("/admin/users/:username", middleware.JWTAuthAdmin(), userAdmin.UpdateUserByUsername)
+
+		v1.GET("/admin/books", middleware.JWTAuthAdmin(), bookAdmin.GetAllBooks)
+		v1.POST("/admin/books", middleware.JWTAuthAdmin(), bookAdmin.CreateBook)
+		v1.PUT("/admin/books/:id", middleware.JWTAuthAdmin(), bookAdmin.UpdateBook)
+		v1.DELETE("/admin/books/:id", middleware.JWTAuthAdmin(), bookAdmin.DeleteBook)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
