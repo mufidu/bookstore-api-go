@@ -1,10 +1,11 @@
 package api
 
 import (
-	"golang-rest-api-template/docs"
-	"golang-rest-api-template/pkg/api/books"
-	"golang-rest-api-template/pkg/auth"
-	"golang-rest-api-template/pkg/middleware"
+	"bookstore-api-go/docs"
+	"bookstore-api-go/pkg/api/books"
+	authAdmin "bookstore-api-go/pkg/auth/admin"
+	authUser "bookstore-api-go/pkg/auth/user"
+	"bookstore-api-go/pkg/middleware"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -27,15 +28,18 @@ func InitRouter() *gin.Engine {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/", books.Healthcheck)
-		v1.GET("/books", middleware.APIKeyAuth(), books.FindBooks)
-		v1.POST("/books", middleware.APIKeyAuth(), middleware.JWTAuth(), books.CreateBook)
-		v1.GET("/books/:id", middleware.APIKeyAuth(), books.FindBook)
-		v1.PUT("/books/:id", middleware.APIKeyAuth(), books.UpdateBook)
-		v1.DELETE("/books/:id", middleware.APIKeyAuth(), books.DeleteBook)
+		v1.GET("/", middleware.JWTAuthAdmin(), books.Healthcheck)
+		v1.GET("/books", books.FindBooks)
+		v1.POST("/books", middleware.JWTAuthUser(), books.CreateBook)
+		v1.GET("/books/:id", books.FindBook)
+		v1.PUT("/books/:id", books.UpdateBook)
+		v1.DELETE("/books/:id", books.DeleteBook)
 
-		v1.POST("/login", middleware.APIKeyAuth(), auth.LoginHandler)
-		v1.POST("/register", middleware.APIKeyAuth(), auth.RegisterHandler)
+		v1.POST("/user/login", authUser.LoginHandler)
+		v1.POST("/user/register", authUser.RegisterHandler)
+
+		v1.POST("/admin/login", authAdmin.LoginHandler)
+		v1.POST("/admin/register", authAdmin.RegisterHandler)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

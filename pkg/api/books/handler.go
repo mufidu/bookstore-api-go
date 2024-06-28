@@ -1,10 +1,10 @@
 package books
 
 import (
+	"bookstore-api-go/pkg/cache"
+	"bookstore-api-go/pkg/database"
+	"bookstore-api-go/pkg/models"
 	"encoding/json"
-	"golang-rest-api-template/pkg/cache"
-	"golang-rest-api-template/pkg/database"
-	"golang-rest-api-template/pkg/models"
 	"net/http"
 	"strconv"
 	"time"
@@ -31,7 +31,6 @@ func Healthcheck(g *gin.Context) {
 // @Summary Get all books with pagination
 // @Description Get a list of all books with optional pagination
 // @Tags books
-// @Security ApiKeyAuth
 // @Produce json
 // @Param offset query int false "Offset for pagination" default(0)
 // @Param limit query int false "Limit for pagination" default(10)
@@ -94,7 +93,6 @@ func FindBooks(c *gin.Context) {
 // @Summary Create a new book
 // @Description Create a new book with the given input data
 // @Tags books
-// @Security ApiKeyAuth
 // @Security JwtAuth
 // @Accept  json
 // @Produce  json
@@ -131,7 +129,6 @@ func CreateBook(c *gin.Context) {
 // @Summary Find a book by ID
 // @Description Get details of a book by its ID
 // @Tags books
-// @Security ApiKeyAuth
 // @Produce json
 // @Param id path string true "Book ID"
 // @Success 200 {object} models.Book "Successfully retrieved book"
@@ -152,7 +149,6 @@ func FindBook(c *gin.Context) {
 // @Summary Update a book by ID
 // @Description Update the book details for the given ID
 // @Tags books
-// @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Book ID"
@@ -184,7 +180,6 @@ func UpdateBook(c *gin.Context) {
 // @Summary Delete a book by ID
 // @Description Delete the book with the given ID
 // @Tags books
-// @Security ApiKeyAuth
 // @Produce json
 // @Param id path string true "Book ID"
 // @Success 204 {string} string "Successfully deleted book"

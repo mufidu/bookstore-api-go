@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"golang-rest-api-template/pkg/models"
+	"bookstore-api-go/pkg/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -36,6 +36,7 @@ func ConnectDatabase() {
 	}
 	database.AutoMigrate(&models.Book{})
 	database.AutoMigrate(&models.User{})
+	database.AutoMigrate(&models.Admin{})
 
 	DB = database
 }

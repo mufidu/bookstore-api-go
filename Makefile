@@ -24,5 +24,5 @@ clean:
 	docker rm go-rest-api-template
 	docker rm dockerPostgres
 	docker rm dockerRedis
-	docker image rm golang-rest-api-template-backend
+	docker image rm bookstore-api-go-backend
 	rm -rf .dbdata

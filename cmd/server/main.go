@@ -1,17 +1,17 @@
 package main
 
 import (
-	"golang-rest-api-template/pkg/api"
-	"golang-rest-api-template/pkg/cache"
-	"golang-rest-api-template/pkg/database"
+	"bookstore-api-go/pkg/api"
+	"bookstore-api-go/pkg/cache"
+	"bookstore-api-go/pkg/database"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
-// @title           Swagger Example API
+// @title           Bookstore API GO
 // @version         1.0
-// @description     This is a sample server celler server.
+// @description     API for bookstore.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support
@@ -24,13 +24,9 @@ import (
 // @host      localhost:9000
 // @BasePath  /api/v1
 
-// @securityDefinitions.apikey JwtAuth
+// @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name X-API-Key
 
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/

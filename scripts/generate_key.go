@@ -1,8 +1,8 @@
 package main
 
 import (
+	auth "bookstore-api-go/pkg/auth/user"
 	"fmt"
-	"golang-rest-api-template/pkg/auth"
 )
 
 func main() {

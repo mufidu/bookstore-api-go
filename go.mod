@@ -1,4 +1,4 @@
-module golang-rest-api-template
+module bookstore-api-go
 
 go 1.22
 
