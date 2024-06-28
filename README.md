@@ -112,6 +112,7 @@ golang-rest-api-template/
 ### Tech Stack
 
 - Go 1.15+ as the programming language.
+- gin as the HTTP web framework.
 - Docker and Docker Compose for containerization.
 - PostgreSQL for the database.
 - GORM as the ORM.
