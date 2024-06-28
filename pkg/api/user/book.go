@@ -1,4 +1,4 @@
-package bookUser
+package user
 
 import (
 	"bookstore-api-go/pkg/database"

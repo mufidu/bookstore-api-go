@@ -1,10 +1,10 @@
 package main
 
 import (
-	auth "bookstore-api-go/pkg/api/admin/auth"
+	"bookstore-api-go/pkg/api/admin"
 	"fmt"
 )
 
 func main() {
-	fmt.Println(auth.GenerateRandomKey())
+	fmt.Println(admin.GenerateRandomKey())
 }

@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	authAdmin "bookstore-api-go/pkg/api/admin/auth"
-	authUser "bookstore-api-go/pkg/api/user/auth"
+	"bookstore-api-go/pkg/api/admin"
+	"bookstore-api-go/pkg/api/user"
 	"fmt"
 	"net/http"
 	"strings"
@@ -28,10 +28,10 @@ func JWTAuthUser() gin.HandlerFunc {
 		}
 
 		tokenStr := header[len(BearerSchema):]
-		claims := &authUser.CustomClaims{}
+		claims := &user.CustomClaims{}
 
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-			return authUser.JwtKey, nil
+			return user.JwtKey, nil
 		})
 
 		if err != nil {
@@ -78,10 +78,10 @@ func JWTAuthAdmin() gin.HandlerFunc {
 		}
 
 		tokenStr := header[len(BearerSchema):]
-		claims := &authAdmin.CustomClaims{}
+		claims := &admin.CustomClaims{}
 
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-			return authAdmin.JwtKey, nil
+			return admin.JwtKey, nil
 		})
 
 		if err != nil {

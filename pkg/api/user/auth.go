@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"bookstore-api-go/pkg/database"
@@ -28,30 +28,30 @@ var JwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 // @BasePath /api/v1
 
 // LoginHandler godoc
-// @Summary Authenticate an admin
+// @Summary Authenticate a user
 // @Schemes
-// @Description Authenticates an admin using username and password, returns a JWT token if successful
-// @Tags admin
+// @Description Authenticates a user using username and password, returns a JWT token if successful
+// @Tags user
 // @Accept  json
 // @Produce  json
-// @Param admin body models.LoginAdmin true "Admin login object"
+// @Param   user     body    models.LoginUser     true        "User login object"
 // @Success 200 {string} string "JWT Token"
 // @Failure 400 {string} string "Bad Request"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /admin/login [post]
+// @Router /user/login [post]
 func LoginHandler(c *gin.Context) {
-	var incomingAdmin models.Admin
-	var dbAdmin models.Admin
+	var incomingUser models.User
+	var dbUser models.User
 
 	// Get JSON body
-	if err := c.ShouldBindJSON(&incomingAdmin); err != nil {
+	if err := c.ShouldBindJSON(&incomingUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad Request"})
 		return
 	}
 
-	// Fetch the admin from the database
-	if err := database.DB.Where("username = ?", incomingAdmin.Username).First(&dbAdmin).Error; err != nil {
+	// Fetch the user from the database
+	if err := database.DB.Where("username = ?", incomingUser.Username).First(&dbUser).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		} else {
@@ -61,67 +61,67 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	// Verify password
-	if err := bcrypt.CompareHashAndPassword([]byte(dbAdmin.Password), []byte(incomingAdmin.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(incomingUser.Password)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		return
 	}
 
 	// Generate JWT token
-	token, err := GenerateToken(dbAdmin.Username)
+	token, err := GenerateToken(dbUser.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
 		return
 	}
 
-	// Send admin info and token
-	c.JSON(http.StatusOK, gin.H{"admin": dbAdmin, "token": token})
+	// Send user info and token
+	c.JSON(http.StatusOK, gin.H{"user": dbUser, "token": token})
 }
 
 // RegisterHandler godoc
-// @Summary Register a new admin
+// @Summary Register a new user
 // @Schemes http
-// @Description Registers a new admin with the given username and password
-// @Tags admin
+// @Description Registers a new user with the given username and password
+// @Tags user
 // @Accept  json
 // @Produce  json
-// @Param   admin     body    models.RegisterAdmin     true        "Admin registration object"
+// @Param   user     body    models.RegisterUser     true        "User registration object"
 // @Success 200 {string} string	"Successfully registered"
 // @Failure 400 {string} string "Bad Request"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /admin/register [post]
+// @Router /user/register [post]
 func RegisterHandler(c *gin.Context) {
-	var admin models.RegisterAdmin
+	var user models.RegisterUser
 
-	if err := c.ShouldBindJSON(&admin); err != nil {
+	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Hash the password
-	hashedPassword, err := HashPassword(admin.Password)
+	hashedPassword, err := HashPassword(user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not hash password"})
 		return
 	}
 
-	// Create new admin
-	newAdmin := models.Admin{Username: admin.Username, Password: hashedPassword, Email: admin.Email}
+	// Create new user
+	newUser := models.User{Username: user.Username, Password: hashedPassword, Email: user.Email}
 
 	// Save the user to the database
-	if err := database.DB.Create(&newAdmin).Error; err != nil {
+	if err := database.DB.Create(&newUser).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save user"})
 		return
 	}
 
 	// Generate JWT token
-	token, err := GenerateToken(admin.Username)
+	token, err := GenerateToken(user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
 		return
 	}
 
 	// c.JSON(http.StatusOK, gin.H{"message": "Registration successful"})
-	c.JSON(http.StatusOK, gin.H{"user": newAdmin, "token": token})
+	c.JSON(http.StatusOK, gin.H{"user": newUser, "token": token})
 }
 
 func HashPassword(password string) (string, error) {
@@ -139,7 +139,7 @@ func GenerateToken(username string) (string, error) {
 			ExpiresAt: expirationTime,
 			Issuer:    username,
 		},
-		UserType: "admin",
+		UserType: "user",
 		Username: username,
 	}
 

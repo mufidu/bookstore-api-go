@@ -1,4 +1,4 @@
-package profileUser
+package user
 
 import (
 	"bookstore-api-go/pkg/database"
@@ -7,13 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
 
 // @BasePath /api/v1
 

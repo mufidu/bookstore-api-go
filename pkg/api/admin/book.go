@@ -1,4 +1,4 @@
-package bookAdmin
+package admin
 
 import (
 	"bookstore-api-go/pkg/database"
