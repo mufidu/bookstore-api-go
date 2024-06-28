@@ -40,6 +40,7 @@ func ConnectDatabase() {
 	database.AutoMigrate(&models.User{})
 	database.AutoMigrate(&models.Admin{})
 	database.AutoMigrate(&models.Cart{})
+	database.AutoMigrate(&models.Transaction{})
 
 	DB = database
 }

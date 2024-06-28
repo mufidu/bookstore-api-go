@@ -2,7 +2,6 @@ package main
 
 import (
 	"bookstore-api-go/pkg/api"
-	"bookstore-api-go/pkg/cache"
 	"bookstore-api-go/pkg/database"
 	"log"
 
@@ -31,7 +30,7 @@ import (
 // @externalDocs.description  OpenAPI
 // @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
-	cache.InitRedis()
+	// cache.InitRedis()
 	database.ConnectDatabase()
 
 	//gin.SetMode(gin.ReleaseMode)

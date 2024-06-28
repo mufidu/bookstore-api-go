@@ -3,18 +3,19 @@ package models
 import "time"
 
 type Book struct {
-	ID        uint      `json:"id" gorm:"primary_key"`
-	Title     string    `json:"title"`
-	Price     int       `json:"price"`
-	Genre     string    `json:"genre"`
-	Cover     string    `json:"cover"`
-	Author    string    `json:"author"`
-	Year      int       `json:"year"`
-	Quantity  int       `json:"quantity"`
-	Carts     []*Cart   `json:"carts" gorm:"many2many:cart_books;"`
-	Users     []*User   `json:"users" gorm:"many2many:user_books;"`
-	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
+	ID        uint       `json:"id" gorm:"primary_key"`
+	Title     string     `json:"title"`
+	Price     int        `json:"price"`
+	Genre     string     `json:"genre"`
+	Cover     string     `json:"cover"`
+	Author    string     `json:"author"`
+	Year      int        `json:"year"`
+	Quantity  int        `json:"quantity"`
+	Carts     []*Cart    `json:"carts" gorm:"many2many:cart_books;"`
+	Users     []*User    `json:"users" gorm:"many2many:user_books;"`
+	CartBooks []CartBook `json:"cart_books"`
+	CreatedAt time.Time  `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt time.Time  `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
 type CreateBook struct {
