@@ -3,10 +3,17 @@ package profileUser
 import (
 	"bookstore-api-go/pkg/database"
 	"bookstore-api-go/pkg/models"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
 
 // GetProfile godoc
 // @Summary Get user profile
@@ -63,8 +70,22 @@ func UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	// Update the user in the database
-	if err := database.DB.Model(&user).Where("username = ?", username).Updates(user).Error; err != nil {
+	// Hash the password
+	hashedPassword, err := HashPassword(user.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	user.Password = hashedPassword
+
+	// Find the user in the database
+	if err := database.DB.Where("username = ?", username).First(&user).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Update the user's profile
+	if err := database.DB.Save(&user).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}

@@ -3,6 +3,7 @@ package api
 import (
 	"bookstore-api-go/docs"
 	authAdmin "bookstore-api-go/pkg/api/admin/auth"
+	userAdmin "bookstore-api-go/pkg/api/admin/user"
 	"bookstore-api-go/pkg/api/books"
 	authUser "bookstore-api-go/pkg/api/user/auth"
 	profileUser "bookstore-api-go/pkg/api/user/profile"
@@ -43,6 +44,8 @@ func InitRouter() *gin.Engine {
 
 		v1.POST("/admin/login", authAdmin.LoginHandler)
 		v1.POST("/admin/register", authAdmin.RegisterHandler)
+		v1.GET("/admin/users", middleware.JWTAuthAdmin(), userAdmin.GetAllUsers)
+		v1.PUT("/admin/users/:username", middleware.JWTAuthAdmin(), userAdmin.UpdateUserByUsername)
 	}
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

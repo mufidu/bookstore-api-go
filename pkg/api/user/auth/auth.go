@@ -91,7 +91,6 @@ func LoginHandler(c *gin.Context) {
 // @Router /user/register [post]
 func RegisterHandler(c *gin.Context) {
 	var user models.RegisterUser
-	var dbUser models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,7 +114,7 @@ func RegisterHandler(c *gin.Context) {
 	}
 
 	// Generate JWT token
-	token, err := GenerateToken(dbUser.Username)
+	token, err := GenerateToken(user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
 		return
