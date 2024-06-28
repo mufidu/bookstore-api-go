@@ -2,9 +2,9 @@ package api
 
 import (
 	"bookstore-api-go/docs"
+	authAdmin "bookstore-api-go/pkg/api/admin/auth"
 	"bookstore-api-go/pkg/api/books"
-	authAdmin "bookstore-api-go/pkg/auth/admin"
-	authUser "bookstore-api-go/pkg/auth/user"
+	authUser "bookstore-api-go/pkg/api/user/auth"
 	"bookstore-api-go/pkg/middleware"
 	"time"
 
