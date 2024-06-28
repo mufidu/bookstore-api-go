@@ -333,6 +333,14 @@ func Checkout(c *gin.Context) {
 	transaction.Status = "pending"
 	database.DB.Save(&transaction)
 
+	// Reduce the quantity of the books
+	for _, cartBook := range cartBooks {
+		book := models.Book{}
+		database.DB.Where("id = ?", cartBook.BookID).First(&book)
+		book.Quantity -= cartBook.Quantity
+		database.DB.Save(&book)
+	}
+
 	// Remove all cart books that belong to the cart
 	database.DB.Model(&cart).Association("Books").Delete(&cartBooks)
 
@@ -341,5 +349,63 @@ func Checkout(c *gin.Context) {
 	database.DB.Save(&cart)
 
 	// Send the charge response
+	c.JSON(http.StatusOK, gin.H{"transaction": transaction})
+}
+
+// PaymentHandler godoc
+// @Summary Payment Handler
+// @Schemes http
+// @Description Handle the payment status of a transaction
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param   order_id     body    string     true        "Order ID"
+// @Param   transaction_status     body    string     true        "Transaction Status"
+// @Success 200 {object} models.Transaction	"Successfully handled payment status"
+// @Failure 400 {string} string "Bad Request"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {string} string "Transaction not found"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user/payment [post]
+func PaymentHandler(c *gin.Context) {
+	var transaction models.Transaction
+
+	type OrderRequest struct {
+		OrderID           string `json:"order_id"`
+		TransactionStatus string `json:"transaction_status"`
+	}
+
+	var orderRequest OrderRequest
+	if err := c.BindJSON(&orderRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Fetch the transaction
+	if err := database.DB.Where("invoice_number = ?", orderRequest.OrderID).First(&transaction).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Transaction not found"})
+		return
+	}
+
+	// Handle the payment status
+	if transaction.Status != "pending" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Transaction already paid or expired"})
+		return
+	}
+
+	if orderRequest.TransactionStatus == "settlement" {
+		transaction.Status = "paid"
+	} else if orderRequest.TransactionStatus == "cancel" || orderRequest.TransactionStatus == "expire" {
+		transaction.Status = "expired"
+	} else if orderRequest.TransactionStatus == "deny" {
+		// Ignore deny status
+	} else if orderRequest.TransactionStatus == "pending" {
+		transaction.Status = "pending"
+	}
+
+	// Save the transaction
+	database.DB.Save(&transaction)
+
+	// Send the updated transaction
 	c.JSON(http.StatusOK, gin.H{"transaction": transaction})
 }

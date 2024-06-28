@@ -40,6 +40,7 @@ func InitRouter() *gin.Engine {
 		v1.DELETE("/user/cart/:id", middleware.JWTAuthUser(), user.RemoveFromCart)
 		v1.GET("/user/cart", middleware.JWTAuthUser(), user.GetCart)
 		v1.POST("/user/cart/checkout", middleware.JWTAuthUser(), user.Checkout)
+		v1.POST("/user/payment", user.PaymentHandler)
 
 		v1.POST("/admin/login", admin.LoginHandler)
 		v1.POST("/admin/register", admin.RegisterHandler)
