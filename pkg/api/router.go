@@ -39,6 +39,7 @@ func InitRouter() *gin.Engine {
 		v1.POST("/user/login", authUser.LoginHandler)
 		v1.POST("/user/register", authUser.RegisterHandler)
 		v1.GET("/user/profile", middleware.JWTAuthUser(), profileUser.GetProfile)
+		v1.PUT("/user/profile", middleware.JWTAuthUser(), profileUser.UpdateProfile)
 
 		v1.POST("/admin/login", authAdmin.LoginHandler)
 		v1.POST("/admin/register", authAdmin.RegisterHandler)
