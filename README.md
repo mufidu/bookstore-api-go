@@ -9,6 +9,7 @@ This project is a backend system for managing an online bookstore. It allows cus
 ### CI/CD
 
 -   **Testing:** Unit and integration tests are run on GitHub Actions every time a commit is pushed.
+-   **CI/CD Pipeline:** A GitHub Actions workflow is set up to build the application to see if it compiles successfully.
 
 ### User Authentication
 
@@ -51,8 +52,7 @@ This project is a backend system for managing an online bookstore. It allows cus
 
 ### Testing
 
--   **Unit Tests:** Important API endpoints (book and order) have unit tests.
--   **Integration Testing:** Integration testing ensures components work together seamlessly.
+-   **Unit Tests:** Important API endpoints (book and user) have unit tests.
 
 ## Documentation
 

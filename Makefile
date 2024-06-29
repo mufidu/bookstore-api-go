@@ -1,6 +1,6 @@
 setup:
 	go install github.com/swaggo/swag/cmd/swag@latest
-	~/go/bin/swag init --dir cmd/server/
+	~/go/bin/swag init -g cmd/server/main.go
 	go build -o bin/server cmd/server/main.go
 
 build:
@@ -8,6 +8,12 @@ build:
 
 dev:
 	go run github.com/air-verse/air
+
+test:
+	docker compose down
+	docker compose up --build -d
+	go test ./pkg/api/admin -v
+	docker compose down
 
 up:
 	docker compose up
